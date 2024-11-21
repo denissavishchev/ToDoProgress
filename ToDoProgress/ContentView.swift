@@ -1,21 +1,30 @@
-//
-//  ContentView.swift
-//  ToDoProgress
-//
-//  Created by Devis on 21/11/2024.
-//
-
 import SwiftUI
 
+struct Task: Identifiable{
+    let id = UUID()
+    let title: String
+    var status: TaskType = .todo
+}
+
 struct ContentView: View {
+    
+    @State var text = ""
+    @State var selectedTask: TaskType? = .todo
+    @State private var tasks: [Task] = [
+        Task(title: "Set up Xcode"),
+        Task(title: "Create a new project"),
+    ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack{
+            ScrollView{
+                VStack{
+                    HalfCircleProgressView(tasks: tasks)
+                        .frame(height: 250)
+                        .padding(.top, 70)
+                }
+            }
         }
-        .padding()
     }
 }
 
