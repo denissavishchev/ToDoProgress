@@ -34,6 +34,7 @@ struct HalfCircleProgressView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity)
     }
 }
 

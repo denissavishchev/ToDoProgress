@@ -22,9 +22,20 @@ struct ContentView: View {
                     HalfCircleProgressView(tasks: tasks)
                         .frame(height: 250)
                         .padding(.top, 70)
+                    ForEach(tasks.indices, id: \.self){index in
+                        TaskRow(task: $tasks[index])
+                    }
                 }
             }
+            .safeAreaPadding(.bottom, 100)
+            .scrollIndicators(.hidden)
+            NewTaskView(text: $text, selectedTask: $selectedTask){
+                newTask in
+                tasks.append(newTask)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
+        .safeAreaPadding()
     }
 }
 
