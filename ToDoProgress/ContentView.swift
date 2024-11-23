@@ -17,18 +17,38 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            ScrollView{
+            if tasks.isEmpty{
                 VStack{
-                    HalfCircleProgressView(tasks: tasks)
-                        .frame(height: 250)
-                        .padding(.top, 70)
-                    ForEach(tasks.indices, id: \.self){index in
-                        TaskRow(task: $tasks[index])
+                    Text("No tasks")
+                        .foregroundColor(.gray)
+                        .font(.headline)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }else{
+                ScrollView{
+                    VStack{
+                        HalfCircleProgressView(tasks: tasks)
+                            .frame(height: 250)
+                            .padding(.top, 70)
+                        ForEach(tasks.indices, id: \.self){index in
+                            HStack{
+                                TaskRow(task: $tasks[index])
+                                Button{
+                                    deleteTask(at: IndexSet(integer: index))
+                                }label: {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                }
+                            .padding(.leading, 8)
+                            }
+                                
+                        }
                     }
                 }
+                .safeAreaPadding(.bottom, 100)
+                .scrollIndicators(.hidden)
             }
-            .safeAreaPadding(.bottom, 100)
-            .scrollIndicators(.hidden)
             NewTaskView(text: $text, selectedTask: $selectedTask){
                 newTask in
                 tasks.append(newTask)
@@ -37,6 +57,13 @@ struct ContentView: View {
         }
         .safeAreaPadding()
     }
+    
+    func deleteTask(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+            if tasks.indices.contains(index) {
+                tasks.remove(atOffsets: offsets)
+            }
+        }
 }
 
 #Preview {
